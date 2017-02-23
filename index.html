@@ -27,3 +27,125 @@ canvas {
   <h1>Fractal Tor</h1>
 </div>
 <canvas id="canvas"></canvas>
+
+<script>
+ 
+
+canvas = document.getElementById("canvas");
+context = canvas.getContext("2d");
+img_tor = new Image;
+img_horn = new Image;
+img_tor.onload = function(){
+  img_horn.onload = function(){
+    update();
+  }
+  img_horn.src = "horn.png";
+};
+img_tor.src = "tor.png";
+
+width = canvas.width = window.innerWidth;
+height = canvas.height = window.innerHeight;
+	var p0 = {
+		x: width /2,
+		y:height 
+	
+	},
+	
+	 p1 = {
+		x: width /2,
+		y: 0
+	
+	},
+	branchAngleA = Math.PI / 5,
+	branchAngleB = Math.PI / 5,
+	trunkRatio = randomRange(0.34,0.37);
+
+truckchiant = 0.45;
+context.save()
+context.translate(p0.x, p0.y);
+context.rotate(0 - Math.PI * 0.5);
+context.scale(-1,-1);
+context.drawImage(img_horn, -.06*branchLength, -.4*branchLength, (branchLength)/10, branchLength/3);
+context.restore();
+
+finalcolor = colors[Math.floor(Math.random() * colors.length)];
+
+	function tree(p0,p1, limit){
+		var dx = p1.x - p0.x,
+			dy = p1.y - p0.y,
+			dist = Math.sqrt(dx * dx + dy * dy),
+			angle = Math.atan2(dy,dx),
+			branchLength = dist * (1- trunkRatio),
+			pA = {
+				x:p0.x + dx * trunkRatio,
+				y:p0.y + dy * trunkRatio
+			},
+			pB = {
+				x:pA.x + Math.cos(angle + branchAngleA) * branchLength,
+				y:pA.y + Math.sin(angle + branchAngleA) * branchLength,
+			},
+			pC = {
+				x:pA.x + Math.cos(angle - branchAngleB) * branchLength,
+				y:pA.y + Math.sin(angle - branchAngleB) * branchLength,
+			},
+			pD = {
+				x:pA.x + Math.cos(angle + (branchAngleA - branchAngleB)/2) * branchLength,
+				y:pA.y + Math.sin(angle + (branchAngleA - branchAngleB)/2) * branchLength,
+			};
+
+    context.save()
+    context.translate(pA.x, pA.y);
+    context.rotate(angle + branchAngleA - Math.PI * 0.5);
+    context.scale(1,-1);
+    context.drawImage(img_horn, -.06*branchLength, -.4*branchLength, (branchLength)/10, branchLength/3);
+    context.restore();
+    
+    context.save()
+    context.translate(pA.x, pA.y);
+    context.rotate(angle - branchAngleB - Math.PI * 0.5);
+    context.scale(-1,-1);
+    context.drawImage(img_horn, -.06*branchLength, -.4*branchLength, (branchLength)/10, branchLength/3);
+    context.restore();
+
+    context.save()
+    context.translate(pA.x, pA.y);
+    context.rotate(angle + (branchAngleA - branchAngleB)/2 - Math.PI * 0.5);
+    context.scale(1,-1);
+    context.drawImage(img_horn, -.06*branchLength, -.4*branchLength, (branchLength)/10, branchLength/3);
+    context.restore();
+
+    context.save()
+    context.translate(pA.x, pA.y);
+    context.rotate(angle + 0.5 * Math.PI);
+    context.drawImage(img_tor, -.15 * branchLength, -.15 * branchLength, .30 * branchLength, .30 * branchLength);
+    context.restore()
+
+		if(limit > 0){
+			tree(pA, pC, limit -1);
+			tree(pA, pB, limit -1);
+			tree(pA, pD, limit -1);
+		}
+
+		branchAngleA = 1 + Math.random() * 1.35;
+		branchAngleB = 1 + Math.random() * 1.35;
+
+		truckchiant += 1;
+	
+	}
+
+
+function update(){
+	context.clearRect(0,0,width,height);
+		tree(p0,p1,4);
+}
+
+function randomRange(min, max){
+	return min + Math.random() * (max - min );
+}
+
+function randomInt(min, max){
+	return Math.floor(min + Math.random()* (max - min + 1));
+}
+
+
+</script>
