@@ -1,3 +1,4 @@
+
 <style>
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,700");
 body {
@@ -61,12 +62,7 @@ height = canvas.height = window.innerHeight;
 	trunkRatio = randomRange(0.34,0.37);
 
 truckchiant = 0.45;
-context.save()
-context.translate(p0.x, p0.y);
-context.rotate(0 - Math.PI * 0.5);
-context.scale(-1,-1);
-context.drawImage(img_horn, -.06*branchLength, -.4*branchLength, (branchLength)/10, branchLength/3);
-context.restore();
+
 
 finalcolor = colors[Math.floor(Math.random() * colors.length)];
 
@@ -136,7 +132,20 @@ finalcolor = colors[Math.floor(Math.random() * colors.length)];
 
 function update(){
 	context.clearRect(0,0,width,height);
-		tree(p0,p1,4);
+	
+	var dx = p1.x - p0.x,
+		dy = p1.y - p0.y,
+	dist = Math.sqrt(dx * dx + dy * dy),
+	angle = Math.atan2(dy,dx),
+	branchLength = dist;
+
+	context.save()
+	context.translate(p0.x, p0.y);
+	context.rotate(0 - Math.PI);
+	context.scale(-1,-1);
+	context.drawImage(img_horn, -.06*branchLength, -.4*branchLength, (branchLength)/10, branchLength/3);
+	context.restore();
+	tree(p0,p1,4);
 }
 
 function randomRange(min, max){
